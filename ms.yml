@@ -1,0 +1,118 @@
+version: '2'
+services:
+    tradings-ms:
+        image: caenietoba/trading-manager:1.0
+        labels:
+            - microservices
+        links:
+            - db
+        ports:
+            - 4005:4005
+        depends_on:
+            - db
+    db:
+        image: mongo
+        container_name: 'tradings-db'
+        labels:
+            - microservices
+        expose:
+            - '27017:27017'
+        volumes:
+            - mongodata:/data/trading_db
+
+    users-ms:
+        image: caenietoba/users-manager:1.0
+        labels:
+            - microservices
+        ports:
+            - "3000:3000"
+        environment: 
+            LDAP_URL: '104.154.39.113'
+        depends_on:
+            - users-db
+    users-db:
+        image: mysql:5.7
+        labels:
+            - microservices
+        environment:
+            MYSQL_ROOT_PASSWORD: 123
+            MYSQL_DATABASE: users-db
+            MYSQL_USER: sa
+            MYSQL_PASSWORD: 123
+        ports:
+            - "3306:3306"
+
+    stores-ms:
+        image: caenietoba/stores-manager:1.0
+        labels:
+            - microservices
+        ports:
+            - "3001:3001"
+        depends_on:
+            - stores-db
+    stores-db:
+        image: mysql:5.7
+        labels:
+            - microservices
+        environment:
+            MYSQL_ROOT_PASSWORD: 123
+            MYSQL_DATABASE: stores-db
+            MYSQL_USER: sa
+            MYSQL_PASSWORD: 123
+        ports:
+            - "3336:3306"
+
+    mongodb:
+        image: mongo
+        container_name: 'products-db'
+        labels:
+            - microservices
+        expose:
+            - 27000:27017
+        networks:
+            - my-network
+        volumes:
+            - mongodata2:/data/product_db
+    products-ms:
+        image: caenietoba/products-manager:1.0
+        labels:
+            - microservices
+        links:
+            - 'mongodb'
+        depends_on: 
+            - mongodb
+        environment:
+            - WAIT_HOSTS=mongodb:27017
+        entrypoint:
+            - /usr/local/bin/docker-entrypoint.sh
+        ports:
+            - "4006:4006"
+        networks:
+            - my-network
+    
+networks:
+    my-network:
+        name: net
+
+volumes:
+    mongodata:
+    mongodata2:
+
+tradings-ms:
+    scale: 4
+db:
+    scale: 4
+products-ms:
+    scale: 2
+mongodb:
+    scale: 2
+stores-ms:
+    scale: 2
+stores-db:
+    scale: 2
+users-ms:
+    scale: 2
+users-db:
+    scale: 2
+
+ms-store-app

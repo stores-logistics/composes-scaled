@@ -1,0 +1,35 @@
+version: '2'
+services:
+    proxy-store:
+        image: caenietoba/proxy-store:1.0
+        labels:
+            - proxy
+        container_name: stores-proxy
+        depends_on:
+            - api-gateway
+        ports:
+            - "80:80"
+    api-gateway:
+        image: caenietoba/api-gateway:free
+        labels:
+            - api
+        environment:
+            SHOW_URLS: 'true'
+            TRADINGS_URL: tradings-ms.ms-store-app
+            TRADINGS_PORT: '4005'
+            TRADINGS_ENTRY: 'trading'
+            PRODUCTS_URL: products-ms.ms-store-app
+            PRODUCTS_PORT: '4006'
+            PRODUCTS_ENTRY: 'products'
+            STORES_URL: stores-ms.ms-store-app
+            STORES_PORT: '3001'
+            STORES_ENTRY: 'stores-ms/resources/stores'
+            USERS_URL: users-ms.ms-store-app
+            USERS_PORT: '3000'
+            USERS_ENTRY: 'users-ms/resources/users'
+            LOGIN_URL: users-ms.ms-store-app
+            LOGIN_PORT: '3000'
+            LOGIN_ENTRY: 'users-ms/resources/auth'
+
+api-gateway:
+    scale: 2

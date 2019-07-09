@@ -1,0 +1,19 @@
+version: '2'
+services:
+    front-app:
+        image: caenietoba/front:1.5
+        labels:
+            - front
+        volumes:
+            - '/usr/src/app'
+            - '/usr/src/app/node_modules'
+        ports:
+            - '5000:5000'
+        environment:
+            NODE_ENV: development
+            REACT_APP_API_HOST: '34.68.2.153'
+            REACT_APP_API_PORT: ':5001'
+            REACT_APP_API_ENTRY: 'graphql'
+
+front-app:
+    scale: 2
