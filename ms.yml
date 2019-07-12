@@ -26,6 +26,8 @@ services:
             - microservices
         ports:
             - "3000:3000"
+        links:
+            - users-db
         environment: 
             LDAP_URL: '104.154.39.113'
         depends_on:
@@ -48,6 +50,8 @@ services:
             - microservices
         ports:
             - "3001:3001"
+        links:
+            - stores-db
         depends_on:
             - stores-db
     stores-db:
