@@ -103,9 +103,9 @@ volumes:
     mongodata2:
 
 tradings-ms:
-    scale: 4
+    scale: 1
 db:
-    scale: 4
+    scale: 1
 products-ms:
     scale: 2
 mongodb:
