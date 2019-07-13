@@ -103,13 +103,13 @@ volumes:
     mongodata2:
 
 tradings-ms:
-    scale: 1
+    scale: 4
 db:
     scale: 1
 products-ms:
     scale: 2
 mongodb:
-    scale: 2
+    scale: 1
 stores-ms:
     scale: 2
 stores-db:
